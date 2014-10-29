@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.3.1/css/foundation.css"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript" src="library/jquery-2.1.1.js"></script>
+        <script type="text/javascript" src="library/phaser.js"></script>
+        <script type="text/javascript" src="js/controllers/Game.js"></script>
+        <script type="text/javascript" src="js/controllers/Systeme.js"></script>
+    </head>
+    <body>
+        <div class="panel warning informations">
+            <h4>Définir vos informations</h4>
+            <form action="#">
+                <input type="text" name="name" placeholder="Nom" />
+                <select name="faction">
+
+                </select>
+                <a onclick="saveInfos()" class="button small">Enregistrer</a>
+            </form>
+        </div>
+        <div class="panel personnage hidden">
+            <div>
+                <p>
+                    <b>Nom</b> : <span class="nom"/>
+                </p>
+                <p>
+                    <b>Faction</b> : <span class="faction"/>
+                </p>
+            </div>
+        </div>
+        <script type="text/javascript" src="js/entities/Faction.js"></script>
+        <script type="text/javascript" src="js/entities/FruitDuDemon.js"></script>
+        <script type="text/javascript" src="js/entities/Objet.js"></script>
+        <script type="text/javascript" src="js/entities/Inventaire.js"></script>
+        <script type="text/javascript" src="js/entities/Personnage.js"></script>
+
+        <script>
+                    var systeme = new Systeme();
+                    systeme.init();
+
+                    // On teste si le personnage a été chargé
+                    if (systeme.personnage.name !== "") {
+                        vuePersonnage();
+                    }
+
+                    function saveInfos() {
+                        var infos = $("form").serializeArray();
+                        systeme.personnage.reverse(infos);
+                        sessionStorage.setItem("personnage", JSON.stringify(systeme.personnage));
+                        vuePersonnage();
+                    }
+
+                    for (faction in systeme.factions) {
+                        $("form select[name=faction]").append("<option value='" + systeme.factions[faction].name + "'>" + systeme.factions[faction].name + "</option");
+                    }
+
+
+                    function vuePersonnage() {
+                        $(".informations").fadeOut(300, function () {
+                            $(".personnage").fadeIn();
+                            $(".personnage .nom").text(systeme.personnage.name);
+                            $(".personnage .faction").text(systeme.personnage.faction);
+                        });
+                    }
+        </script>
+    </body>
+</html>
